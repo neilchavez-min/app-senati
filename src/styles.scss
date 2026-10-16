@@ -1,0 +1,31 @@
+@use './app/app';
+
+// Unifica el cálculo de tamaños de todos los controles y componentes.
+* {
+  box-sizing: border-box;
+}
+
+// Reserva un ancho mínimo compatible con teléfonos y define el lienzo base.
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: #f4f7fb;
+}
+
+// Normaliza márgenes y aplica la tipografía y contraste globales de la aplicación.
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: #f4f7fb;
+  color: #162c46;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+// Colores de selección coherentes con la paleta institucional.
+::selection {
+  background: #d5e9ff;
+  color: #052c5d;
+}

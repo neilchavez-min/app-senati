@@ -1,0 +1,26 @@
+[
+  {
+    "id": 101,
+    "curso": "Desarrollo de Software PWA",
+    "titulo": "Entregable 01: Configuración de Service Worker e IndexedDB",
+    "instructor": "Ing. Jorge Luque",
+    "fechaEntrega": "2026-10-15",
+    "estado": "Pendiente"
+  },
+  {
+    "id": 102,
+    "curso": "Base de Datos Avanzada",
+    "titulo": "Laboratorio 03: Script DDL PostgreSQL e Indexación",
+    "instructor": "Ing. Carlos Mendoza",
+    "fechaEntrega": "2026-10-18",
+    "estado": "Completado"
+  },
+  {
+    "id": 103,
+    "curso": "Inteligencia Artificial Aplicada",
+    "titulo": "Proyecto Integrador: Modelo Predictivo con Python",
+    "instructor": "Dra. Ana Torres",
+    "fechaEntrega": "2026-10-22",
+    "estado": "Pendiente"
+  }
+]

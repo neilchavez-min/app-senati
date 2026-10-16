@@ -1,0 +1,304 @@
+@if (vistaActual !== 'aplicacion') {
+  <!-- El acceso y registro son locales y demostrativos; no sustituyen la autenticación de un backend. -->
+  <main class="auth-page">
+    <!-- Cabecera institucional visible en las pantallas de acceso. -->
+    <header class="masthead">
+      <a class="masthead-brand" href="/" aria-label="SENATI TaskHub PWA">
+        <span class="senati-symbol" aria-hidden="true">S</span>
+        <span class="brand-divider"></span>
+        <span class="masthead-copy">
+          <strong>SENATI <span>TaskHub PWA</span></strong>
+          <small>Organiza · Colabora · Avanza</small>
+        </span>
+      </a>
+      <div class="pwa-brand">
+        <span class="pwa-mark">PWA</span>
+        <span><strong>PWA</strong><small>Aplicación web progresiva</small></span>
+      </div>
+      <p class="masthead-motto">Tu talento<br />también forma<br />parte del futuro</p>
+    </header>
+
+    <!-- Composición responsiva: tarjeta de acceso sobre la ilustración y panel informativo en escritorio. -->
+    <section class="auth-layout">
+      <div class="campus-art" aria-label="Bienvenido a la comunidad SENATI">
+        <!-- Ilustración construida con CSS para no depender de una imagen externa. -->
+        <div class="art-sun"></div>
+        <div class="art-building">
+          <div class="building-roof"></div>
+          <div class="building-name"><span class="mini-logo">S</span> SENATI</div>
+          <div class="building-windows">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="building-door"></div>
+        </div>
+        <div class="art-ground"></div>
+
+        <!-- El mismo formulario sirve para iniciar sesión y registrar una sesión de demostración. -->
+        <div class="auth-card">
+          <span class="auth-emblem">S</span>
+          <p class="eyebrow">TU ESPACIO ACADÉMICO</p>
+          <h1>{{ vistaActual === 'registro' ? 'Crea tu acceso' : 'Bienvenido a TaskHub' }}</h1>
+          <p class="auth-description">
+            Organiza tus tareas y mantén tus entregas disponibles, incluso sin conexión.
+          </p>
+
+          <form (ngSubmit)="vistaActual === 'registro' ? registrarse() : ingresar()" novalidate>
+            @if (vistaActual === 'registro') {
+              <label class="auth-field">
+                <span>Nombre completo</span>
+                <input
+                  name="nombreRegistro"
+                  type="text"
+                  autocomplete="name"
+                  placeholder="Ej. Juan Pérez"
+                  [(ngModel)]="nombreRegistro"
+                />
+              </label>
+            }
+            <label class="auth-field">
+              <span>Correo electrónico</span>
+              <input
+                name="correoAcceso"
+                type="email"
+                autocomplete="email"
+                placeholder="alumno@senati.pe"
+                [(ngModel)]="correoAcceso"
+              />
+            </label>
+            <label class="auth-field">
+              <span>Contraseña</span>
+              <span class="password-control">
+                <input
+                  name="claveAcceso"
+                  [type]="mostrarClave ? 'text' : 'password'"
+                  [attr.autocomplete]="vistaActual === 'registro' ? 'new-password' : 'current-password'"
+                  placeholder="Mínimo 6 caracteres"
+                  [(ngModel)]="claveAcceso"
+                />
+                <button
+                  class="show-password"
+                  type="button"
+                  [attr.aria-label]="mostrarClave ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                  (click)="mostrarClave = !mostrarClave"
+                >
+                  {{ mostrarClave ? 'Ocultar' : 'Ver' }}
+                </button>
+              </span>
+            </label>
+            @if (errorAcceso) {
+              <p class="auth-error" role="alert">{{ errorAcceso }}</p>
+            }
+            <button class="auth-submit" type="submit">
+              {{ vistaActual === 'registro' ? 'Crear acceso de demostración' : 'Iniciar sesión' }}
+              <span aria-hidden="true">→</span>
+            </button>
+          </form>
+
+          <p class="auth-switch">
+            {{ vistaActual === 'registro' ? '¿Ya tienes acceso?' : '¿No tienes cuenta?' }}
+            <button
+              type="button"
+              (click)="cambiarModoAcceso(vistaActual === 'registro' ? 'login' : 'registro')"
+            >
+              {{ vistaActual === 'registro' ? 'Inicia sesión' : 'Regístrate' }}
+            </button>
+          </p>
+          <p class="demo-notice">
+            Acceso de demostración: no valida credenciales ni crea cuentas reales. La autenticación requiere un servidor.
+          </p>
+        </div>
+        <p class="art-caption">Formamos profesionales para transformar el futuro.</p>
+      </div>
+
+      <!-- Beneficios del producto; este panel se oculta en pantallas móviles pequeñas. -->
+      <aside class="welcome-panel">
+        <div class="welcome-content">
+          <span class="welcome-tag">SENATI · TASKHUB</span>
+          <h2>Todo tu aprendizaje.<br /><span>En un solo lugar.</span></h2>
+          <p>Consulta tus tareas, registra tus avances y continúa trabajando estés donde estés.</p>
+          <div class="feature-list">
+            <div><span class="feature-icon">✓</span><span><strong>Tu progreso, claro</strong><small>Fechas y estados de tus tareas</small></span></div>
+            <div><span class="feature-icon">↻</span><span><strong>Listo para modo offline</strong><small>Guarda entregas en tu dispositivo</small></span></div>
+            <div><span class="feature-icon">⌂</span><span><strong>Siempre a tu alcance</strong><small>Diseñado para móvil y computadora</small></span></div>
+          </div>
+        </div>
+        <div class="welcome-decoration" aria-hidden="true"><span></span><span></span><span></span></div>
+      </aside>
+    </section>
+
+    <!-- Pie de marca de la pantalla inicial. -->
+    <footer class="auth-footer">SENATI TaskHub PWA <span>·</span> Disponible online y offline</footer>
+  </main>
+} @else {
+  <!-- Contenedor de la aplicación académica luego de abrir la sesión local. -->
+  <div class="app-shell">
+    <!-- Navegación para escritorio, estado de red y acceso al perfil. -->
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="TaskHub SENATI, inicio" (click)="seleccionarSeccion('inicio'); $event.preventDefault()">
+        <span class="brand-mark">S</span>
+        <span class="brand-name">SENATI <span>TaskHub</span></span>
+      </a>
+      <nav class="desktop-nav" aria-label="Navegación principal">
+        <button type="button" [class.active]="seccionActual === 'inicio'" (click)="seleccionarSeccion('inicio')">Inicio</button>
+        <button type="button" [class.active]="seccionActual === 'tareas'" (click)="seleccionarSeccion('tareas')">Tareas</button>
+        <button type="button" [class.active]="seccionActual === 'entregas'" (click)="seleccionarSeccion('entregas')">Entregas</button>
+        <button type="button" [class.active]="seccionActual === 'perfil'" (click)="seleccionarSeccion('perfil')">Perfil</button>
+      </nav>
+      <div class="topbar-actions">
+        <div class="connection-status" [class.offline]="!online">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span>{{ online ? 'En línea' : 'Modo offline' }}</span>
+        </div>
+        <button class="user-chip" type="button" (click)="seleccionarSeccion('perfil')" aria-label="Abrir perfil">
+          <span class="user-avatar">{{ saludoUsuario.charAt(0).toUpperCase() }}</span>
+          <span class="user-chip-name">{{ saludoUsuario }}</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <!-- Mensajes accesibles para operaciones, cambios de red y errores. -->
+      @if (notificacionMensaje) {
+        <div class="notification" [ngClass]="tipoNotificacion" role="status" aria-live="polite">
+          <span>{{ notificacionMensaje }}</span>
+          <button type="button" class="dismiss-notice" aria-label="Cerrar aviso" (click)="notificacionMensaje = ''">×</button>
+        </div>
+      }
+
+      <!-- Inicio: resumen de estados, tareas recientes y acceso rápido a entregas. -->
+      @if (seccionActual === 'inicio') {
+        <section class="dashboard-welcome">
+          <div>
+            <p class="eyebrow">PANEL DEL ESTUDIANTE</p>
+            <h1>Hola, {{ saludoUsuario }} <span aria-hidden="true">👋</span></h1>
+            <p class="intro-copy">Aquí tienes un resumen de tus tareas y entregas.</p>
+          </div>
+          <span class="welcome-date">{{ hoy | date: 'EEEE, d MMMM' }}</span>
+        </section>
+
+        <section class="stats-grid" aria-label="Resumen académico">
+          <article class="stat-card stat-pending"><span class="stat-icon">◷</span><strong>{{ tareasPendientesAcademicas }}</strong><span>Pendientes</span></article>
+          <article class="stat-card stat-progress"><span class="stat-icon">↻</span><strong>{{ tareasEnCurso }}</strong><span>En curso</span></article>
+          <article class="stat-card stat-deliveries"><span class="stat-icon">▣</span><strong>{{ entregasPendientes }}</strong><span>Entregas locales</span></article>
+          <article class="stat-card stat-completed"><span class="stat-icon">✓</span><strong>{{ tareasCompletadas }}</strong><span>Completadas</span></article>
+        </section>
+
+        <section class="panel dashboard-task-panel" aria-labelledby="home-tasks-title">
+          <div class="section-heading">
+            <div><p class="eyebrow">TU ACTIVIDAD</p><h2 id="home-tasks-title">Tareas recientes</h2></div>
+            <button class="link-button" type="button" (click)="seleccionarSeccion('tareas')">Ver todas →</button>
+          </div>
+          @if (cargandoTareas) {
+            <p class="empty-state">Cargando tareas…</p>
+          } @else if (listaTareas.length === 0) {
+            <p class="empty-state">No hay tareas disponibles.</p>
+          } @else {
+            <div class="task-list">
+              @for (tarea of listaTareas; track tarea.id) {
+                <article class="task-card">
+                  <span class="task-type-icon">▤</span>
+                  <div class="task-copy">
+                    <span class="course-label">{{ tarea.curso }}</span>
+                    <h3>{{ tarea.titulo }}</h3>
+                    <p>Entrega: {{ formatearFechaEntrega(tarea.fechaEntrega) }}</p>
+                  </div>
+                  <span class="academic-status" [ngClass]="claseEstadoTarea(tarea.estado)">{{ tarea.estado }}</span>
+                  <button class="row-arrow" type="button" aria-label="Ver tareas" (click)="seleccionarSeccion('tareas')">›</button>
+                </article>
+              }
+            </div>
+          }
+        </section>
+
+        <section class="offline-banner">
+          <span class="offline-banner-icon">↻</span>
+          <div><strong>{{ online ? 'Tus entregas siempre a mano' : 'Estás trabajando sin conexión' }}</strong><p>{{ online ? 'Tus avances se guardan en este dispositivo y están listos para cuando se integre el envío al servidor.' : 'Puedes guardar comentarios localmente; se conservarán en este dispositivo.' }}</p></div>
+          <button type="button" (click)="seleccionarSeccion('entregas')">Ir a entregas →</button>
+        </section>
+      }
+
+      <!-- Tareas: catálogo filtrable y enlace directo para crear una entrega relacionada. -->
+      @if (seccionActual === 'tareas') {
+        <section class="page-heading">
+          <div><p class="eyebrow">TU CATÁLOGO</p><h1>Tareas asignadas</h1><p class="intro-copy">Consulta cursos, fechas y estado académico.</p></div>
+          <span class="page-count">{{ tareasFiltradas.length }} tareas</span>
+        </section>
+        <section class="panel filters-panel" aria-label="Búsqueda y filtros de tareas">
+          <div class="filters">
+            <div class="field"><label for="buscarTitulo">Buscar por título</label><input id="buscarTitulo" type="search" placeholder="Ej. Proyecto integrador" [(ngModel)]="busquedaTitulo" /></div>
+            <div class="field"><label for="filtrarCurso">Filtrar por curso</label><select id="filtrarCurso" [(ngModel)]="cursoSeleccionado"><option value="">Todos los cursos</option>@for (curso of cursos; track curso) {<option [value]="curso">{{ curso }}</option>}</select></div>
+          </div>
+        </section>
+        <section class="panel task-panel" aria-label="Tareas disponibles">
+          @if (cargandoTareas) { <p class="empty-state">Cargando tareas…</p> }
+          @else if (tareasFiltradas.length === 0) { <p class="empty-state">{{ listaTareas.length ? 'No hay tareas que coincidan con la búsqueda.' : 'No hay tareas disponibles.' }}</p> }
+          @else {
+            <div class="task-list">
+              @for (tarea of tareasFiltradas; track tarea.id) {
+                <article class="task-card">
+                  <span class="task-type-icon">▤</span>
+                  <div class="task-copy"><span class="course-label">{{ tarea.curso }}</span><h3>{{ tarea.titulo }}</h3><p>Instructor: {{ tarea.instructor }}</p></div>
+                  <div class="task-meta"><span class="academic-status" [ngClass]="claseEstadoTarea(tarea.estado)">{{ tarea.estado }}</span><span class="due-date">Entrega: {{ formatearFechaEntrega(tarea.fechaEntrega) }}</span></div>
+                  <button class="small-action" type="button" (click)="seleccionarSeccion('entregas'); tareaSeleccionadaId = tarea.id">Entregar</button>
+                </article>
+              }
+            </div>
+          }
+        </section>
+      }
+
+      <!-- Entregas: formulario validado y registros persistidos en IndexedDB. -->
+      @if (seccionActual === 'entregas') {
+        <section class="page-heading">
+          <div><p class="eyebrow">BILLETERA LOCAL</p><h1>Mis entregas</h1><p class="intro-copy">Registra comentarios y consúltalos aunque no tengas conexión.</p></div>
+          <div class="pending-counter"><span class="counter-number">{{ entregasPendientes }}</span><span>pendiente{{ entregasPendientes === 1 ? '' : 's' }}</span>@if (entregasPendientes > 0) {<button class="retry-button" type="button" [disabled]="!online" (click)="reintentarSincronizacion()">Reintentar</button>}</div>
+        </section>
+        <section class="panel form-panel" aria-labelledby="form-title">
+          <div class="section-heading"><div><p class="eyebrow">NUEVA ENTREGA</p><h2 id="form-title">Registrar comentario</h2></div><span class="local-tag">Guardado local en este dispositivo</span></div>
+          <form (ngSubmit)="enviarEntrega()" novalidate>
+            <div class="field"><label for="tareaSelect">Tarea <span class="required">*</span></label><select id="tareaSelect" name="tarea" [(ngModel)]="tareaSeleccionadaId" [attr.aria-invalid]="errorTareaId ? 'true' : null" aria-describedby="tarea-error" [disabled]="cargandoTareas || listaTareas.length === 0"><option [ngValue]="null">Selecciona una tarea</option>@for (tarea of listaTareas; track tarea.id) {<option [ngValue]="tarea.id">{{ tarea.curso }} · {{ tarea.titulo }}</option>}</select>@if (errorTareaId) {<small id="tarea-error" class="field-error">{{ errorTareaId }}</small>}</div>
+            <div class="field"><label for="comentario">Comentario de entrega <span class="required">*</span></label><textarea id="comentario" name="comentario" rows="4" maxlength="2000" placeholder="Describe el avance o adjunta una referencia a tu entregable…" [(ngModel)]="comentarioEntrega" [attr.aria-invalid]="errorComentario ? 'true' : null" aria-describedby="comentario-help comentario-error"></textarea><div class="field-hint"><small id="comentario-help">Máximo 2000 caracteres.</small>@if (errorComentario) {<small id="comentario-error" class="field-error">{{ errorComentario }}</small>}</div></div>
+            <button class="primary-button" type="submit" [disabled]="cargandoTareas || listaTareas.length === 0">Guardar entrega local <span aria-hidden="true">↗</span></button>
+          </form>
+        </section>
+        <section class="panel submissions-panel" aria-labelledby="submissions-title">
+          <div class="section-heading"><div><p class="eyebrow">INDEXEDDB</p><h2 id="submissions-title">Entregas guardadas</h2></div><span class="result-count">{{ entregasFiltradas.length }} registro{{ entregasFiltradas.length === 1 ? '' : 's' }}</span></div>
+          <div class="filters compact-filters"><div class="field"><label for="buscarEntrega">Buscar por título</label><input id="buscarEntrega" type="search" placeholder="Buscar entrega" [(ngModel)]="busquedaTitulo" /></div><div class="field"><label for="filtrarEntregaCurso">Curso</label><select id="filtrarEntregaCurso" [(ngModel)]="cursoSeleccionado"><option value="">Todos los cursos</option>@for (curso of cursos; track curso) {<option [value]="curso">{{ curso }}</option>}</select></div></div>
+          @if (cargandoEntregas) {<p class="empty-state">Recuperando entregas guardadas…</p>}
+          @else if (entregasFiltradas.length === 0) {<p class="empty-state">{{ entregasLocales.length ? 'No hay entregas que coincidan con la búsqueda.' : 'Aún no has guardado entregas locales.' }}</p>}
+          @else {
+            <div class="submission-list">
+              @for (entrega of entregasFiltradas; track entrega.id) {
+                <article class="submission-card">
+                  <div class="submission-heading"><div><span class="course-label">{{ entrega.curso }}</span><h3>{{ entrega.tituloTarea }}</h3><small>Guardada el {{ entrega.fechaRegistro | date: 'd MMM y, HH:mm' }}</small></div><span class="sync-status" [ngClass]="entrega.estadoSincronizacion.toLowerCase()">{{ entrega.estadoSincronizacion }}</span></div>
+                  <details><summary>Ver comentario</summary><p class="submission-comment">{{ entrega.comentario }}</p></details>
+                  @if (entregaAEliminarId === entrega.id) {
+                    <div class="delete-confirmation" role="group" aria-label="Confirmar eliminación"><span>¿Eliminar esta entrega local?</span><button class="text-button danger" type="button" (click)="confirmarEliminacion(entrega)">Sí, eliminar</button><button class="text-button" type="button" (click)="cancelarEliminacion()">Cancelar</button></div>
+                  } @else {<button class="text-button danger" type="button" (click)="solicitarEliminacion(entrega)">Eliminar entrega</button>}
+                </article>
+              }
+            </div>
+          }
+          <p class="sync-note">La conexión por sí sola no confirma un envío. Las entregas solo cambiarán a SINCRONIZADO cuando una API real lo confirme.</p>
+        </section>
+      }
+
+      <!-- Perfil: muestra la identidad demostrativa y permite cerrar la sesión local. -->
+      @if (seccionActual === 'perfil') {
+        <section class="page-heading"><div><p class="eyebrow">TU CUENTA</p><h1>Perfil</h1><p class="intro-copy">Información de tu sesión en este dispositivo.</p></div></section>
+        <section class="panel profile-card"><span class="profile-avatar">{{ saludoUsuario.charAt(0).toUpperCase() }}</span><div><p class="eyebrow">ESTUDIANTE SENATI · ACCESO DEMOSTRATIVO</p><h2>{{ saludoUsuario }}</h2><p>Tu sesión de demostración se recuerda solo en este navegador. No se guarda la contraseña.</p></div><button class="logout-button" type="button" (click)="cerrarSesion()">Cerrar sesión</button></section>
+      }
+    </main>
+
+    <!-- Navegación fija optimizada para pantallas móviles. -->
+    <nav class="mobile-nav" aria-label="Navegación móvil">
+      <button type="button" [class.active]="seccionActual === 'inicio'" (click)="seleccionarSeccion('inicio')"><span>⌂</span>Inicio</button>
+      <button type="button" [class.active]="seccionActual === 'tareas'" (click)="seleccionarSeccion('tareas')"><span>▤</span>Tareas</button>
+      <button type="button" [class.active]="seccionActual === 'entregas'" (click)="seleccionarSeccion('entregas')"><span>▣</span>Entregas</button>
+      <button type="button" [class.active]="seccionActual === 'perfil'" (click)="seleccionarSeccion('perfil')"><span>♙</span>Perfil</button>
+    </nav>
+
+    <!-- Nota que aclara dónde se conservan las entregas mientras no exista una API. -->
+    <footer class="app-footer">SENATI TaskHub PWA <span>·</span> Tus entregas quedan en este dispositivo hasta contar con una API.</footer>
+  </div>
+}
